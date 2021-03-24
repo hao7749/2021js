@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .box {
+            position: absolute;
+
+            width: 100px;
+            height: 100px;
+            background-color: tomato;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box"></div>
+
+    <script>
+        // 移动函数
+        function move(ele, arg, target, cb) {
+            // 获取初始值
+            let start = parseInt(window.getComputedStyle(ele, null)[arg])
+            // 获取方向  目标值减去初始值除以目标值减去初始值的绝对值 
+            // 正值或负值除以他自己得到 +1 或 -1
+            let dir = (target - start) / Math.abs(target - start)
+            let speed = dir * 5
+            fn();
+            function fn() {
+                // 每次调用的初始值
+                let now = parseInt(window.getComputedStyle(ele, null)[arg])
+                // 判断初始值是否与目标值相同
+                // 相同就是运动完了
+                if (now === target) {
+                    // 有回调则调用回调
+                    cb && cb()
+                    console.log('运动完成');
+                } else {
+                    // 没运动完就做运动
+                    ele.style[arg] = now + speed + 'px'
+
+                    window.requestAnimationFrame(fn); // 继续调用fn函数
+
+                }
+            }
+        }
+
+        let ele1 = document.querySelector('.box');
+
+        move(ele1, "top", 300, () => {
+            move(ele1, "left", 300, () => {
+                move(ele1, "top", 0, () => {
+                    move(ele1, "left", 0,)
+                })
+            })
+        })
+
+
+
+
+    </script>
+</body>
+
+</html>

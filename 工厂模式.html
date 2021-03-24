@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        function plant(name) {
+
+            let obj = {};
+            obj.goods = '这是' + name;
+            obj.machine = function() {
+                console.log(name + '进行加工');
+            }
+            return obj;
+        }
+
+        let plant1 = plant('衣服');
+        let plant2 = plant('鞋子');
+
+
+        
+        console.log(plant1.goods);
+        plant1.machine();
+
+        // 每个“实例”方法都是独立的，不在同一个内存地址
+        // 应用较多时占用内存地址
+        console.log(plant1.machine === plant2.machine);
+
+    </script>
+</body>
+</html>

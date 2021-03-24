@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        a {
+            color: black;
+            text-decoration: none;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        body {
+            background-color: aqua;
+        }
+
+        .containaer {
+            width: 500px;
+            height: 300px;
+            margin: 30px auto 0;
+        }
+
+        .rank1 a,
+        .rank2 a {
+            margin-right: 20px;
+
+        }
+
+        .rank1,
+        .rank2 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            text-align: center;
+            color: white;
+            border-collapse: collapse;
+        }
+
+        table tr th {
+            background-color: white;
+            color: black;
+        }
+
+        table tr th,
+        table tr td {
+            border: 1px solid #000;
+            padding: 5px 20px;
+        }
+
+        table tr td {
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="containaer">
+        <header>
+            <div class="rank1">
+                <a href="#">年龄从大到小</a>
+                <a href="#">年龄从小到大</a>
+                <a href="#">默认</a>
+            </div>
+            <div class="rank2">
+                <a href="#">只显示男</a>
+                <a href="#">只显示女</a>
+                <a href="#">默认</a>
+            </div>
+        </header>
+        <table>
+            <thead>
+                <tr class="th">
+                    <th>id</th>
+                    <th>姓名</th>
+                    <th>年龄</th>
+                    <th>性别</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>张三</td>
+                    <td>14</td>
+                    <td>男</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        const roll = [
+            {
+                id: 0,
+                name: '张三',
+                age: 15,
+                sex: '男',
+            },
+            {
+                id: 1,
+                name: '李四',
+                age: 20,
+                sex: '女',
+            }
+            ,
+            {
+                id: 2,
+                name: '翠花',
+                age: 17,
+                sex: '女',
+            }
+            ,
+            {
+                id: 3,
+                name: '王五',
+                age: 14,
+                sex: '男',
+            }
+            ,
+            {
+                id: 4,
+                name: '王花花',
+                age: 19,
+                sex: '男',
+            }
+            ,
+            {
+                id: 5,
+                name: '李栓蛋',
+                age: 24,
+                sex: '男',
+            }
+            ,
+            {
+                id: 6,
+                name: '田七',
+                age: 10,
+                sex: '女',
+            }
+            ,
+            {
+                id: 7,
+                name: '哦啊',
+                age: 21,
+                sex: '男',
+            }
+            ,
+            {
+                id: 8,
+                name: '女孩',
+                age: 13,
+                sex: '女',
+            }
+        ];
+
+        let containaer = document.querySelector('.containaer');
+
+        let rank1 = containaer.querySelector('.rank1');
+        let rank2 = containaer.querySelector('.rank2');
+
+        let oTable = containaer.querySelector('table');
+        let oTbody = oTable.querySelector('tbody');
+
+        rander(roll);
+
+        // 数据渲染
+        function rander(data) {
+
+            let str = '';
+            data.forEach((item, index) => {
+                str += `<tr>
+                        <td>${item.id}</td>
+                        <td>${item.name}</td>
+                        <td>${item.age}</td>
+                        <td>${item.sex}</td>
+                    </tr>`
+            });
+
+            oTbody.innerHTML = str;
+        }
+
+        // 年龄排序方法集
+        const ageSortFun = [
+            // 年龄从大到小
+            (data) => data.sort((a, b) => b.age - a.age),
+            // 年龄从xiao到da
+            (data) => data.sort((a, b) => a.age - b.age),
+            // id小到大
+            (data) => data.sort((a, b) => a.id - b.id)
+        ]
+
+        // 性别过滤方法集
+        const sexFiltrFun = [
+            data =>  data.filter(item => item.sex === '男'),
+            data =>  data.filter(item => item.sex === '女'),
+            data => [...data]
+        ]
+
+        console.log(sexFiltrFun[0](roll));
+        // 年龄排序
+        function ageSort() {
+            // 获取所有按钮
+            let btns = rank1.querySelectorAll('a');
+            btns.forEach((item, key) => {
+                item.onclick = () => {
+                    // 利用key值调用对应方法
+                    let data = ageSortFun[key](roll);
+                    rander(data);
+                }
+            })
+        }
+
+        ageSort();
+        sexFiltr();
+
+        // 性别过滤
+        function sexFiltr() {
+            let btns = rank2.querySelectorAll('a');
+            btns.forEach((item, key) => {
+                item.onclick = () => {
+                    // 利用key值调用对应方法
+                    let data = sexFiltrFun[key](roll);
+                    rander(data);
+                }
+            })
+        }
+
+
+
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            margin: 10px auto;
+            background: whitesmoke;
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="map">
+
+    </div>
+</body>
+<script>
+    class Map {
+        constructor(ele, gridSize) {
+            this.ele = ele;
+            this.gridSize = gridSize;
+            this.rows;
+            this.columns;
+            this.setData();
+            this.render();
+            this.getFreely()
+        }
+        // 获取行列
+        getFreely() {
+            this.rows = this.ele.clientWidth / this.gridSize;
+            this.columns = this.ele.clientHeight / this.gridSize;
+        }
+        // 设置数据
+        setData() {
+            this.data = [
+                {
+                    x: 40,
+                    y: 0,
+                    color: 'red'
+                }, {
+                    x: 30,
+                    y: 0,
+                    color: 'green'
+                }, {
+                    x: 20,
+                    y: 0,
+                    color: 'green'
+                }, {
+                    x: 10,
+                    y: 0,
+                    color: 'green'
+                }, {
+                    x: 0,
+                    y: 0,
+                    color: 'green'
+                }
+            ]
+        }
+        // 渲染数据
+        render() {
+            let html = ''
+            this.data.forEach(item => {
+                html += `<div style="background-color: ${item.color};
+                            width: ${this.gridSize}px; height: ${this.gridSize}px; position: absolute; top: ${item.y}px; 
+                        left: ${item.x}px;"></div>`
+            })
+            this.ele.innerHTML = html
+        }
+        // 清空数数据
+        clearData() {
+            this.data = null;
+            this.ele.innerHTML = '';
+        }
+        // 判断给出坐标是否包含数据
+        include(x, y) {
+            return this.data.some(item => {
+                return item.x === x && item.y === y
+            })
+        }
+    }
+
+    class Food {
+
+        constructor(map) {
+            this.map = map
+
+            this.createFood(this.map.rows, this.map.columns)
+
+        }
+        // 生成食物
+        createFood(rows, columns) {
+
+            let x = Math.floor(Math.random() * rows) * 10;
+            let y = Math.floor(Math.random() * columns) * 10;
+
+            this.map.ele.innerHTML += `<div style="background-color: blue;
+                            width: 10px; height: 10px; position: absolute; top: ${y}px; 
+                        left: ${x}px;border-radius: 50%;"></div>`
+        }
+    }
+
+    class Shake {
+        constructor() {
+
+        }
+        move() {
+
+        }
+    }
+
+    {
+        let map = new Map(document.querySelector('#map'), 10)
+
+        new Food(map)
+    }
+</script>
+
+</html>

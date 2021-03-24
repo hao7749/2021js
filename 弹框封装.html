@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .pop-up {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .pop-up .mask {
+            width: 100%;
+            height: 100%;
+        }
+
+        .pop-up .maskcol {
+            background: rgba(0, 0, 0, .4);
+        }
+
+        .pop-up .mask .box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -75%);
+            overflow: hidden;
+            width: 300px;
+            height: 180px;
+            border-radius: 5px;
+            background-color: seashell;
+        }
+
+        .pop-up .mask .box .box-head {
+            width: 100%;
+            height: 40px;
+            background-color: lightblue;
+            text-align: right;
+        }
+
+        .pop-up .mask .box .box-head .title {
+            float: left;
+            max-width: 200px;
+            height: 40px;
+            line-height: 40px;
+            margin-left: 20px;
+        }
+
+        .pop-up .mask .box .box-head .close {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            /* background-color: lightcoral; */
+            line-height: 30px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .pop-up .mask .box .box-body {
+            width: 100%;
+            height: 80px;
+            /* background-color: lightgoldenrodyellow; */
+            box-sizing: border-box;
+            padding: 10px 20px;
+        }
+
+        .pop-up .mask .box .box-body input {
+            width: 100%;
+            margin-top: 20px;
+            height: 30px;
+            border: 1px solid #000;
+            outline: none;
+            box-sizing: border-box;
+            padding-left: 10px;
+        }
+
+        .pop-up .mask .box .box-foot {
+            overflow: hidden;
+            box-sizing: border-box;
+            padding-right: 20px;
+            margin-top: 15px;
+        }
+
+        .pop-up .mask .box .box-foot .cancel-btn,
+        .pop-up .mask .box .box-foot .confirm-btn {
+            float: right;
+            width: 50px;
+            height: 30px;
+            margin-left: 20px;
+            border: none;
+            /* border: lightskyblue 1px solid; */
+            outline: none;
+        }
+
+        .pop-up .mask .box .box-foot .confirm-btn {
+            background-color: lightskyblue;
+        }
+
+        .pop-up .mask .box .box-foot .cancel-btn:hover {
+            border: 1px solid lightblue;
+        }
+
+        .pop-up .mask .box .box-foot .cancel-btn:active {
+            color: #ccc;
+        }
+
+        .pop-up .mask .box .box-foot .confirm-btn:hover {
+            background-color: rgb(78, 168, 224);
+        }
+
+        .pop-up .mask .box .box-foot .confirm-btn:active {
+            color: lightcyan;
+        }
+    </style>
+</head>
+
+<body>
+    <button class="btn1">点击</button>
+    <button class="btn2">点击2</button>
+    <!-- 
+    <div class="pop-up">
+        <div class="mask">
+            <div class="box">
+                <div class="box-head">
+                    <div class="title">tips</div>
+                    <div class="close">x</div>
+                </div>
+                <div class="box-body">
+                    <input type="text" placeholder="请输入">
+                </div>
+                <div class="box-foot">
+                    <button class="confirm-btn">确定</button>
+                    <button class="cancel-btn">取消</button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- 
+    <div class="pop-up">
+        <div class="mask">
+            <div class="box">
+                <div class="box-head">
+                    <div class="title">tips</div>
+                    <div class="close">x</div>
+                </div>
+                <div class="box-body">
+                    文字提示
+                </div>
+                <div class="box-foot">
+                    <button class="confirm-btn">确定</button>
+                    <button class="cancel-btn">取消</button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <script>
+        class CalDrag {
+
+            constructor(ele) {
+                this.ele = ele
+                this.flag = true;
+                this.downFn()
+            }
+
+            downFn() {
+                this.ele.onmousedown = (e) => {
+                    this.flag = true;
+                    // 事件对象的兼容ie写法F
+                    let ev = e || window.event;
+                    // 鼠标离视口左边的长度减元素离视口左边的长度
+                    let x = ev.clientX - this.ele.offsetLeft;
+                    // 鼠标离元素上边的长度
+                    let y = ev.clientY - this.ele.offsetTop;
+                    // 开始拖拽传入鼠标离元素上边的长及鼠标离元素左边的长
+                    this.moveFn(x, y);
+                    // 调用拖拽停止事件
+                    this.dragStop();
+                }
+            }
+
+            moveFn(x, y) {
+                this.ele.addEventListener('mousemove', (e) => {
+                    // 判断一下能不能拖
+                    if (this.flag) {
+                        let ev = e || window.event;
+                        // 获取移动时鼠标离视口上左长度
+                        let xx = ev.clientX
+                        let yy = ev.clientY
+                        // 鼠标离视口减去鼠标离元素就对了
+                        this.setStyle(xx - x, yy - y);
+                    }
+                });
+            }
+
+            setStyle(x, y) {
+                this.ele.style.zIndex = 11;
+                this.ele.style.top = y + 'px';
+                this.ele.style.left = x + 'px';
+            }
+
+            dragStop() {
+                // 鼠标离开拖拽终止
+                this.ele.onmouseout = () => {
+                    this.flag = false;
+                }
+                // 鼠标抬起拖拽终止
+                this.ele.onmouseup = () => {
+                    this.flag = false;
+                }
+            }
+        }
+        class Dialog {
+            constructor(options) {
+                // 默认数据
+                this.opts = Object.assign({
+                    width: '300px',
+                    height: '150px',
+                    title: 'tops',
+                    content: '默认提示',
+                    cancel: true, // 是否有取消按钮
+                    mask: true, // 是否有遮罩
+                    drag: false, // 是否能拖动
+                    // 默认回调 
+                    success: function (val = '') {
+                        console.log('确定', val);
+                    },
+                    cancel: function () {
+                        console.log('取消');
+                    }
+                }, options);
+                // 调用初始化
+                this.init();
+            }
+            // 初始化函数
+            init() {
+                this.renderView();
+                this.drag()
+            }
+            // 视图渲染
+            renderView() {
+                this.ele = document.createElement('div')
+                this.ele.classList.add('pop-up');
+                this.ele.innerHTML = `<div class="mask ${this.opts.mask ? 'maskcol' : ''}">
+                    <div class="box">
+                        <div class="box-head">
+                            <div class="title">${this.opts.title}</div>
+                            <div class="close">x</div>
+                        </div>
+                        <div class="box-body">
+                            ${this.opts.content}
+                        </div>
+                        <div class="box-foot">
+                            <button class="confirm-btn">确定</button>
+                            ${this.opts.cancel ? '<button class="cancel-btn">取消</button>' : ''}
+                        </div>
+                    </div>
+                </div>
+                `
+                document.body.appendChild(this.ele)
+            }
+
+            // 打开
+            open() {
+                this.ele.style.display = 'block'
+            }
+            // 关闭close()
+            close() {
+                this.ele.style.display = 'none'
+            }
+            // 几个按钮的一系列操作
+            handle(className, val = '') {
+                switch (className) {
+                    case 'close':
+                        this.close();
+                        break
+                    case 'cancel-btn':
+                        this.close();
+                        break
+                    case 'confirm-btn':
+                        this.close();
+                        this.opts.success(val);
+                        break
+                    default:
+                        break
+                }
+            }
+            // 拖拽
+            drag() {
+                if (!this.opts.drag) {
+                    return
+                }
+                let drag1 = new CalDrag(this.ele.querySelector('.box'));
+            }
+        }
+
+        let dialog1 = new Dialog({
+            width: '100px',
+            // cancel: false,
+            title: 'title',
+            mask: false,
+            drag: true,
+            success: function () {
+                console.log('我的成功');
+            }
+        })
+
+        // 触发一号弹框
+        document.querySelector('.btn1').addEventListener('click', () => {
+            dialog1.open()
+        });
+
+        // document.querySelector('.close').addEventListener('click', () => {
+        //     dialog1.close()
+        // });
+
+        // document.querySelector('.confirm-btn').addEventListener('click', () => {
+        //     dialog1.close()
+        //     dialog1.opts.success()
+        // });
+
+        // 各个按钮点击
+        dialog1.ele.querySelector('.box').addEventListener('click', (e) => {
+            dialog1.handle(e.target.className);
+        })
+
+        // 弹框二
+        class Dialog2 extends Dialog {
+            constructor(options) {
+                super(options);
+            }
+            // 生成对话框
+            inputView() {
+                this.ele.querySelector('.box-body').innerHTML = `<input type="text" placeholder="${this.opts.content}">`
+            }
+        }
+        // 构建实例
+        let dialog2 = new Dialog2({
+            title: 'lll',
+        });
+
+        // 触发弹框
+        document.querySelector('.btn2').addEventListener('click', () => {
+            dialog2.open();
+        });
+
+        // 一系列按钮操作
+        dialog2.ele.querySelector('.box').addEventListener('click', (e) => {
+            let val = dialog2.ele.querySelector('.box input').value
+            dialog2.handle(e.target.className, val);
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sweep</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #sweep {
+            width: 270px;
+            height: 270px;
+            margin: 0 auto;
+            border: 2px solid red;
+        }
+
+        .grid {
+            display: inline-block;
+            vertical-align: middle;
+            box-sizing: border-box;
+            width: 30px;
+            height: 30px;
+            background: #000;
+            border: 2px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="sweep">
+    </div>
+    <script>
+
+        // 10个雷
+        // 周围提示
+        // 右键变化
+        // 点击爆炸或者清掉
+        // 成功扫完
+        {
+            // 随机10个雷
+            let s = new Set();
+            for (let i = 0; i < 20; i++) {
+                if (s.size < 10) {
+                    s.add(Math.floor(Math.random() * 82));
+                } else {
+                    break;
+                }
+            }
+            let bomb = Array.from(s);
+            for(let i = 0; i < bomb.length; i++ ) {
+                
+            }
+            console.log(bomb);
+
+            // 生成棋盘9*9
+            let chessboard = document.querySelector('#sweep');
+
+            for (let i = 0; i < 9 * 9; i++) {
+                let grid = document.createElement('div');
+                grid.className = 'grid';
+                chessboard.appendChild(grid);
+            }
+
+            // 埋雷
+            let grids = chessboard.querySelectorAll('.grid');
+            for (let i = 0; i < bomb.length; i++) {
+                console.log(grids[bomb[i]]);
+                grids[bomb[i]].setAttribute('sign', 'bomb');
+                // grids[bomb[i]].innerText = '💣';
+
+
+            }
+
+            let sweep = chessboard.querySelectorAll('.grid');
+            for(let i = 0; i < sweep.length; i++) {
+                sweep[i].onclick = ()=>{
+                    sweep[i].style.background = 'none';
+                    if(sweep[i].getAttribute('sign') === 'bomb') {
+                        // sweep[i].innerHTML = '💣';
+                        console.log(1);
+                    }else {
+
+                    }
+                   
+                }
+
+            }
+
+
+
+
+
+
+
+        }
+
+
+
+
+    </script>
+</body>
+
+</html>

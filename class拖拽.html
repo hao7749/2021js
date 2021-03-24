@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .block1,
+        .block2 {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: red;
+
+        }
+
+        .block2 {
+            background: blue;
+            left: 200px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="block1"></div>
+
+    <div class="block2"></div>
+
+    <script>
+
+        let block1 = document.querySelector('.block1');
+
+        let block2 = document.querySelector('.block2');
+
+
+
+        class CalDrag {
+
+            constructor(ele) {
+                this.ele = ele
+                this.flag = true;
+                this.downFn()
+            }
+
+            downFn() {
+                this.ele.onmousedown = (e) => {
+                    this.flag = true;
+                    // 事件对象的兼容ie写法F
+                    let ev = e || window.event;
+                    // 鼠标离视口左边的长度减元素离视口左边的长度
+                    let x = ev.clientX - this.ele.offsetLeft;
+                    // 鼠标离元素上边的长度
+                    let y = ev.clientY - this.ele.offsetTop;
+                    // 开始拖拽传入鼠标离元素上边的长及鼠标离元素左边的长
+                    this.moveFn(x, y);
+                    // 调用拖拽停止事件
+                    this.dragStop();
+                }
+            }
+
+            moveFn(x, y) {
+                this.ele.addEventListener('mousemove', (e) => {
+                    // 判断一下能不能拖
+                    if (this.flag) {
+                        let ev = e || window.event;
+                        // 获取移动时鼠标离视口上左长度
+                        let xx = ev.clientX
+                        let yy = ev.clientY
+                        // 鼠标离视口减去鼠标离元素就对了
+                        this.setStyle(xx - x, yy - y);
+                    }
+                });
+            }
+
+            setStyle(x, y) {
+                this.ele.style.zIndex = 11;
+                this.ele.style.top = y + 'px';
+                this.ele.style.left = x + 'px';
+            }
+
+            dragStop() {
+                // 鼠标离开拖拽终止
+                this.ele.onmouseout = () => {
+                    this.flag = false;
+                }
+                // 鼠标抬起拖拽终止
+                this.ele.onmouseup = () => {
+                    this.flag = false;
+                }
+            }
+        }
+
+        // 拖拽构造函数
+        function Drag(ele) {
+            // 元素
+            this.ele = ele
+            this.winWidth = window.innerWidth;
+            // 能否拖拽变量
+            this.flag = true;
+            // 拖拽开始函数
+            this.downFn();
+        }
+
+        // 拖拽开始函数
+        Drag.prototype.downFn = function () {
+            // 保留this,如果用箭头函数则不用这样
+            let that = this;
+            this.ele.onmousedown = function (e) {
+                that.flag = true;
+                // 事件对象的兼容ie写法
+                let ev = e || window.event;
+                // 鼠标离视口左边的长度减元素离视口左边的长度
+                let x = ev.clientX - this.offsetLeft;
+                // 鼠标离元素上边的长度
+                let y = ev.clientY - this.offsetTop;
+                // 开始拖拽传入鼠标离元素上边的长及鼠标离元素左边的长
+                that.moveFn(x, y);
+                // 调用拖拽停止事件
+                that.dragStop();
+            }
+        }
+
+        // 开始拖拽
+        Drag.prototype.moveFn = function (x, y) {
+            // 我也不知道为啥不能用this.ele.onmousemove这种方法
+            this.ele.addEventListener('mousemove', (e) => {
+                // 判断一下能不能拖
+                if (this.flag) {
+                    let ev = e || window.event;
+                    // 获取移动时鼠标离视口上左长度
+                    let xx = ev.clientX
+                    let yy = ev.clientY
+                    // 鼠标离视口减去鼠标离元素就对了
+                    this.setStyle(xx - x, yy - y);
+                }
+            });
+        }
+
+        // 样式设置（元素移动的具体实现）
+        Drag.prototype.setStyle = function (x, y) {
+            this.ele.style.zIndex = 11;
+            x = x < 0 ? 0 : x
+            y = y < 0 ? 0 : y
+            x = x > this.winWidth - 100 ? this.winWidth - 100 : x
+            console.log(this.winWidth);
+            console.log(x);
+            this.ele.style.top = y + 'px';
+            this.ele.style.left = x + 'px';
+        }
+
+        // 拖拽停止
+        Drag.prototype.dragStop = function () {
+            // 鼠标离开拖拽终止
+            this.ele.onmouseout = () => {
+                this.flag = false;
+            }
+            // 鼠标抬起拖拽终止
+            this.ele.onmouseup = () => {
+                this.flag = false;
+            }
+        }
+
+        // 实例化
+        let drag1 = new Drag(block1);
+
+
+        let drag2 = new CalDrag(block2);
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 转时间格式
+        let dateStr = String(new Date());
+        let reg = /([^Sun][^Mon][a-zA-Z]) (\d{0,2}) (\d{0,4}) (\d{0,2}:\d{0,2}:\d{0,2})/;
+        // let res2 = dateStr.match(reg);
+
+        let res1 = String(reg.exec(dateStr));
+        console.log(res1);
+
+        let res = res1.replace(reg, "$3-$1-$2 $4");
+        console.log(res);
+
+        console.log(RegExp.$1);
+        console.log(RegExp.$2);
+        console.log(RegExp.$3);
+        console.log(RegExp.$4);
+
+        // 137开头手机号
+
+        let phonNum = 13024031245;
+        let phonNum2 = 13724031245;
+        let phonNum3 = 15024031245;
+
+        let reg2 = /^137\d{8}/;
+
+        console.log(reg2.test(phonNum));
+        console.log(reg2.test(phonNum2));
+        console.log(reg2.test(phonNum3));
+
+        // email匹配
+        let reg3 = /[0-9a-zA-Z]+@[0-9a-zA-Z]+[\.com]+?/;
+
+        let mail1 = '84605859@qq.com';
+        let mail2 = 'huangshihao1122@qq.com';
+        let mail3 = "141545asd54";
+
+        console.log(reg3.test(mail1));
+        console.log(reg3.test(mail2));
+        console.log(reg3.test(mail3));
+
+
+        let str = "$name = zhangsan" // 拿到$name
+        let reg4 = /\$(?<str>\w+)/
+        let res2 = str.match(reg4)
+
+        console.log(res2.groups.str); // name
+
+
+            let str2 = 'iphone1iphone2iphone3iphonelll';
+            let reg5 = /iphone(?=\d{1,2})/g;
+            let res3 = str2.replace(reg5,'苹果');
+            console.log(res3); 
+
+    </script>
+</body>
+
+</html>
